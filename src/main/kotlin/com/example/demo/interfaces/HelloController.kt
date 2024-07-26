@@ -9,6 +9,6 @@ class HelloController {
 
     @GetMapping("/hello")
     fun hello(model: Model): String{
-        return "hello";
+        return "hello"
     }
 }
