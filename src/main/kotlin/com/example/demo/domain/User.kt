@@ -10,6 +10,7 @@ class User(
 
     @Column
     val age: Int,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
