@@ -24,4 +24,11 @@ class UserService(
         return userRepository.findByIdOrNull(id)?.toUserDto()
             ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
     }
+
+    @Transactional
+    fun update(id: Long, profileRequest: ProfileRequest){
+        val user = userRepository.findByIdOrNull(id)
+            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+        user.update(profileRequest.name, profileRequest.age)
+    }
 }

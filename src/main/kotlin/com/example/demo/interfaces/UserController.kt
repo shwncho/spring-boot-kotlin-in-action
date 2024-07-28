@@ -1,9 +1,11 @@
 package com.example.demo.interfaces
 
 import com.example.demo.application.UserService
+import com.example.demo.interfaces.request.ProfileRequestDto
 import com.example.demo.interfaces.request.UserRequestDto
 import com.example.demo.interfaces.response.UserResponseDto
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -25,5 +27,10 @@ class UserController(
     fun find(@PathVariable id: Long): UserResponseDto{
         val userResponse = userService.find(id)
         return UserResponseDto(userResponse.id, userResponse.name, userResponse.age)
+    }
+
+    @PatchMapping("{id}")
+    fun update(@PathVariable id: Long, @RequestBody profileRequestDto: ProfileRequestDto){
+        userService.update(id,profileRequestDto.toRequest())
     }
 }
