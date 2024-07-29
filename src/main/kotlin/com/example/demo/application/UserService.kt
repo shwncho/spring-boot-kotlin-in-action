@@ -31,4 +31,9 @@ class UserService(
             ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
         user.update(profileRequest.name, profileRequest.age)
     }
+
+    @Transactional
+    fun delete(id: Long){
+        userRepository.deleteById(id)
+    }
 }

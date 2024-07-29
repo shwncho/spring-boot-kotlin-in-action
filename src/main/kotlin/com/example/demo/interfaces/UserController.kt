@@ -4,6 +4,7 @@ import com.example.demo.application.UserService
 import com.example.demo.interfaces.request.ProfileRequestDto
 import com.example.demo.interfaces.request.UserRequestDto
 import com.example.demo.interfaces.response.UserResponseDto
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -32,5 +33,10 @@ class UserController(
     @PatchMapping("{id}")
     fun update(@PathVariable id: Long, @RequestBody profileRequestDto: ProfileRequestDto){
         userService.update(id,profileRequestDto.toRequest())
+    }
+
+    @DeleteMapping("{id}")
+    fun delete(@PathVariable id: Long){
+        userService.delete(id)
     }
 }
