@@ -5,9 +5,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class HealthController {
-
     @GetMapping("/health")
-    fun hello(): String{
+    fun hello(): String {
         return "health"
     }
 }

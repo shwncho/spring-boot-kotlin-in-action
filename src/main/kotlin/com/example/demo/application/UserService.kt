@@ -7,33 +7,35 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
-
 @Service
 class UserService(
-    private val userRepository: UserRepository
-){
-
+    private val userRepository: UserRepository,
+) {
     @Transactional
-    fun create(request: UserRequest){
+    fun create(request: UserRequest) {
         val createdUser = User(request.name, request.age)
         userRepository.save(createdUser)
     }
 
     @Transactional(readOnly = true)
-    fun find(id: Long): UserResponse{
+    fun find(id: Long): UserResponse {
         return userRepository.findByIdOrNull(id)?.toUserDto()
             ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
     }
 
     @Transactional
-    fun update(id: Long, profileRequest: ProfileRequest){
-        val user = userRepository.findByIdOrNull(id)
-            ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
+    fun update(
+        id: Long,
+        profileRequest: ProfileRequest,
+    ) {
+        val user =
+            userRepository.findByIdOrNull(id)
+                ?: throw EntityNotFoundException("존재하지 않는 유저 입니다.")
         user.update(profileRequest.name, profileRequest.age)
     }
 
     @Transactional
-    fun delete(id: Long){
+    fun delete(id: Long) {
         userRepository.deleteById(id)
     }
 }

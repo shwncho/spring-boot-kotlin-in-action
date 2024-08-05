@@ -4,31 +4,30 @@ import jakarta.persistence.*
 
 @Entity(name = "USERS")
 class User(
-
     @Column
     var name: String,
-
     @Column
     var age: Int,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null
-
+    val id: Long? = null,
 ) {
-    fun update(name: String, age: Int){
+    fun update(
+        name: String,
+        age: Int,
+    ) {
         updateName(name)
         updateAge(age)
     }
 
-    private fun updateName(name: String){
-        if(name.isNotBlank()){
+    private fun updateName(name: String) {
+        if (name.isNotBlank()) {
             this.name = name
         }
     }
 
-    private fun updateAge(age: Int){
-        if(age>0){
+    private fun updateAge(age: Int) {
+        if (age > 0) {
             this.age = age
         }
     }

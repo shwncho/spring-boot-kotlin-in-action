@@ -16,27 +16,35 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/users")
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
 ) {
-
     @PostMapping
-    fun create(@RequestBody requestDto: UserRequestDto){
+    fun create(
+        @RequestBody requestDto: UserRequestDto,
+    ) {
         userService.create(requestDto.toRequest())
     }
 
     @GetMapping("{id}")
-    fun find(@PathVariable id: Long): UserResponseDto{
+    fun find(
+        @PathVariable id: Long,
+    ): UserResponseDto {
         val userResponse = userService.find(id)
         return UserResponseDto(userResponse.id, userResponse.name, userResponse.age)
     }
 
     @PatchMapping("{id}")
-    fun update(@PathVariable id: Long, @RequestBody profileRequestDto: ProfileRequestDto){
-        userService.update(id,profileRequestDto.toRequest())
+    fun update(
+        @PathVariable id: Long,
+        @RequestBody profileRequestDto: ProfileRequestDto,
+    ) {
+        userService.update(id, profileRequestDto.toRequest())
     }
 
     @DeleteMapping("{id}")
-    fun delete(@PathVariable id: Long){
+    fun delete(
+        @PathVariable id: Long,
+    ) {
         userService.delete(id)
     }
 }

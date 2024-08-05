@@ -1,6 +1,6 @@
 package com.example.demo.application
 
-data class ProfileRequest (
+data class ProfileRequest(
     val name: String,
-    val age: Int
+    val age: Int,
 )
