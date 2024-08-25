@@ -9,6 +9,12 @@ plugins {
     id("org.jetbrains.kotlin.plugin.spring") version "1.6.21"
     id("org.jetbrains.kotlin.kapt") version "1.6.21"
     id("org.jlleitschuh.gradle.ktlint").version("12.1.0")
+    id("org.asciidoctor.jvm.convert") version "3.3.2"
+}
+
+val asciidoctorExt = "asciidoctorExt"
+configurations.create(asciidoctorExt) {
+    extendsFrom(configurations.testImplementation.get())
 }
 
 allOpen {
@@ -34,7 +40,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    compileOnly("org.projectlombok:lombok")
+    asciidoctorExt("org.springframework.restdocs:spring-restdocs-asciidoctor")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -54,8 +61,26 @@ kotlin {
     }
 }
 
+val copyDocument = tasks.register<Copy>("copyDocument") {
+    dependsOn(tasks.asciidoctor)
+    doFirst {
+        delete(file("src/main/resources/static/docs"))
+    }
+    from(file("build/docs/asciidoc"))
+    into(file("src/main/resources/static/docs"))
+}
+
+tasks.build {
+    dependsOn(copyDocument)
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.asciidoctor {
+    configurations(asciidoctorExt)
+    baseDirFollowsSourceFile()
 }
 
 ktlint {
