@@ -1,0 +1,16 @@
+= 유저 API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 유저 생성
+include::{snippets}/createUser/http-request.adoc[]
+include::{snippets}/createUser/request-fields.adoc[]
+
+== 유저 조회
+include::{snippets}/findUser/http-request.adoc[]
+include::{snippets}/findUser/path-parameters.adoc[]
+include::{snippets}/findUser/response-body.adoc[]

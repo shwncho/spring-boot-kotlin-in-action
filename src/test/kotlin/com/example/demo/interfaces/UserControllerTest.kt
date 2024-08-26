@@ -20,12 +20,12 @@ import org.springframework.restdocs.payload.PayloadDocumentation.*
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
 
-class UserControllerTest: RestDocsTest() {
+class UserControllerTest : RestDocsTest() {
     private lateinit var userService: UserService
     private lateinit var userController: UserController
 
     @BeforeEach
-    fun setUp(){
+    fun setUp() {
         userService = mockk()
         userController = UserController(userService)
         mockMvc = mockController(userController)
@@ -33,11 +33,11 @@ class UserControllerTest: RestDocsTest() {
 
     @Test
     fun createUser() {
-        every{ userService.create(any()) } just runs
+        every { userService.create(any()) } just runs
 
         given()
             .contentType(ContentType.JSON)
-            .body(UserRequestDto("simple",0))
+            .body(UserRequestDto("simple", 0))
             .post("/api/v1/users")
             .then()
             .status(HttpStatus.OK)
@@ -48,19 +48,19 @@ class UserControllerTest: RestDocsTest() {
                     responsePreprocessor(),
                     requestFields(
                         fieldWithPath("name").type(JsonFieldType.STRING).description("user name"),
-                        fieldWithPath("age").type(JsonFieldType.NUMBER).description("user age")
-                    )
-                )
+                        fieldWithPath("age").type(JsonFieldType.NUMBER).description("user age"),
+                    ),
+                ),
             )
     }
 
     @Test
-    fun findUser(){
-        every{ userService.find(any()) } returns UserResponse(1L,"simple",0)
+    fun findUser() {
+        every { userService.find(any()) } returns UserResponse(1L, "simple", 0)
 
         given()
             .contentType(ContentType.JSON)
-            .pathParam("id",1L)
+            .pathParam("id", 1L)
             .get("/api/v1/users/{id}")
             .then()
             .status(HttpStatus.OK)
@@ -75,9 +75,9 @@ class UserControllerTest: RestDocsTest() {
                     responseFields(
                         fieldWithPath("id").type(JsonFieldType.NUMBER).description("user id"),
                         fieldWithPath("name").type(JsonFieldType.STRING).description("user name"),
-                        fieldWithPath("age").type(JsonFieldType.NUMBER).description("user age")
-                    )
-                )
+                        fieldWithPath("age").type(JsonFieldType.NUMBER).description("user age"),
+                    ),
+                ),
             )
     }
 }

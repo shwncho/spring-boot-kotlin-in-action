@@ -1,5 +1,3 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
     id("org.springframework.boot") version "3.3.2"
     id("io.spring.dependency-management") version "1.1.6"
@@ -8,7 +6,6 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
     id("org.jetbrains.kotlin.plugin.spring") version "1.6.21"
     id("org.jetbrains.kotlin.kapt") version "1.6.21"
-    id("org.jlleitschuh.gradle.ktlint").version("12.1.0")
     id("org.asciidoctor.jvm.convert") version "3.3.2"
 }
 
@@ -35,6 +32,8 @@ java {
 repositories {
     mavenCentral()
 }
+
+val snippetsDir = file("build/generated-snippets")
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -64,30 +63,33 @@ kotlin {
     }
 }
 
-val copyDocument = tasks.register<Copy>("copyDocument") {
-    dependsOn(tasks.asciidoctor)
+tasks.test {
+    outputs.dir(snippetsDir)
+    useJUnitPlatform()
+}
+
+tasks.asciidoctor {
+    inputs.dir(snippetsDir)
+    dependsOn(tasks.test)
+    configurations(asciidoctorExt)
     doFirst {
         delete(file("src/main/resources/static/docs"))
     }
-    from(file("build/docs/asciidoc"))
-    into(file("src/main/resources/static/docs"))
+    baseDirFollowsSourceFile()
 }
+
+val copyDocument =
+    tasks.register<Copy>("copyDocument") {
+        dependsOn(tasks.asciidoctor)
+        from(file("build/docs/asciidoc"))
+        into(file("src/main/resources/static/docs"))
+    }
 
 tasks.build {
     dependsOn(copyDocument)
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-}
-
-tasks.asciidoctor {
-    configurations(asciidoctorExt)
-    baseDirFollowsSourceFile()
-}
-
-ktlint {
-    reporters {
-        reporter(ReporterType.JSON)
-    }
+tasks.bootJar {
+    dependsOn(tasks.asciidoctor)
+    dependsOn(copyDocument)
 }
