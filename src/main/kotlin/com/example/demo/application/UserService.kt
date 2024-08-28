@@ -12,9 +12,10 @@ class UserService(
     private val userRepository: UserRepository,
 ) {
     @Transactional
-    fun create(request: UserRequest) {
-        val createdUser = User(request.name, request.age)
-        userRepository.save(createdUser)
+    fun create(request: UserRequest): UserResponse {
+        val newUser = User(request.name, request.age)
+        return userRepository.save(newUser).toUserDto()
+
     }
 
     @Transactional(readOnly = true)

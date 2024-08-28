@@ -33,7 +33,7 @@ class UserControllerTest : RestDocsTest() {
 
     @Test
     fun createUser() {
-        every { userService.create(any()) } just runs
+        every { userService.create(any()) } returns UserResponse(1L,"simple",0)
 
         given()
             .contentType(ContentType.JSON)
@@ -50,6 +50,11 @@ class UserControllerTest : RestDocsTest() {
                         fieldWithPath("name").type(JsonFieldType.STRING).description("user name"),
                         fieldWithPath("age").type(JsonFieldType.NUMBER).description("user age"),
                     ),
+                    responseFields(
+                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("user id"),
+                        fieldWithPath("name").type(JsonFieldType.STRING).description("user name"),
+                        fieldWithPath("age").type(JsonFieldType.NUMBER).description("user age"),
+                    )
                 ),
             )
     }

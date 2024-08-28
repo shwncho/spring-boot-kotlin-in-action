@@ -9,6 +9,7 @@
 == 유저 생성
 include::{snippets}/createUser/http-request.adoc[]
 include::{snippets}/createUser/request-fields.adoc[]
+include::{snippets}/createUser/response-fields.adoc[]
 
 == 유저 조회
 include::{snippets}/findUser/http-request.adoc[]
