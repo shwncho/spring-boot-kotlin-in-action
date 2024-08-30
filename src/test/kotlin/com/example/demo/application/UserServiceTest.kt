@@ -56,4 +56,27 @@ class UserServiceTest: BehaviorSpec({
             }
         }
     }
+
+    Given("유저의 id와 수정하려는 profile 정보가 주어지는 경우"){
+        val id = 1L
+        val request = ProfileRequest(name = "changeName", age = 20)
+        When("존재하는 유저라면"){
+            val user = User(name = "simple", age = 0, id = id)
+            every { userRepository.findByIdOrNull(id) } returns user
+
+            userService.update(id, request)
+            Then("프로필이 변경된다."){
+                user.name shouldBe "changeName"
+                user.age shouldBe 20
+            }
+        }
+        When("존재하지 않는 유저라면"){
+            every{ userRepository.findByIdOrNull(any()) }   returns null
+
+            val exception = shouldThrow<EntityNotFoundException> { userService.update(id,request) }
+            Then("예외를 발생시킨다."){
+                exception.message shouldBe "존재하지 않는 유저 입니다."
+            }
+        }
+    }
 })
