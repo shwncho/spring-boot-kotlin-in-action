@@ -32,7 +32,7 @@ class UserServiceTest: BehaviorSpec({
         }
     }
 
-    Given("유저의 id가 주어지는 경우"){
+    Given("찾으려는 유저의 id가 주어지는 경우"){
         val id = 1L
 
         When("존재하는 유저를 조회하면"){
@@ -77,6 +77,17 @@ class UserServiceTest: BehaviorSpec({
             Then("예외를 발생시킨다."){
                 exception.message shouldBe "존재하지 않는 유저 입니다."
             }
+        }
+    }
+
+    Given("지우려는 유저의 id가 주어지는 경우"){
+        val id = 1L
+        When("존재하는 유저라면"){
+            every { userRepository.deleteById(any()) }  just Runs
+
+            userService.delete(id)
+            Then("삭제된다.")
+            verify(exactly = 1) { userRepository.deleteById(1L)}
         }
     }
 })
